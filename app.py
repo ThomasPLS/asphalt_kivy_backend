@@ -31,6 +31,11 @@ def login():
         return jsonify({"message": "Login successful!"}), 200
     return jsonify({"message": "Invalid credentials!"}), 401
 
+@app.route("/")
+def home():
+    return jsonify({"message": "Welcome to my API!"})
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Utilise le port de Render ou 5000 en local
     app.run(debug=False, host="0.0.0.0", port=port)
