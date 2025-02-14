@@ -5,7 +5,9 @@ import os
 import psycopg2
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('postgresql://asphalt_records:i2XTTixzUFAX3CIdtTPccJ9sRdcFEoqH@dpg-cun9i4tsvqrc7390jcug-a/asphaltrecords_db')
+
+# Utiliser l'URL PostgreSQL de Render si disponible, sinon SQLite en local
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("postgresql://asphalt_records:i2XTTixzUFAX3CIdtTPccJ9sRdcFEoqH@dpg-cun9i4tsvqrc7390jcug-a/asphaltrecords_db", "sqlite:///users.db")
 db = SQLAlchemy(app)
 
 class User(db.Model):
