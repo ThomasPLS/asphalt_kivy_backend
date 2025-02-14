@@ -40,7 +40,8 @@ def login():
 def home():
     return jsonify({"message": "Welcome to my API!"})
 
-DATABASE_URL = os.environ.get("postgresql://asphalt_records:i2XTTixzUFAX3CIdtTPccJ9sRdcFEoqH@dpg-cun9i4tsvqrc7390jcug-a/asphaltrecords_db")
+DATABASE_URL = os.environ.get("DATABASE_URL")  # Récupérer la vraie URL depuis les variables d'environnement
+
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')  # Connexion sécurisée
 
@@ -49,20 +50,6 @@ def get_users():
     users = User.query.all()
     users_list = [{"id": user.id, "username": user.username} for user in users]
     return jsonify(users_list)
-
-
-
-# Création d'un curseur pour exécuter des requêtes
-cur = conn.cursor()
-
-# Exécution d'une requête SQL
-cur.execute("SELECT version();")
-db_version = cur.fetchone()
-print("Version de PostgreSQL :", db_version)
-
-# Fermeture de la connexion
-cur.close()
-conn.close()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Utilise le port de Render ou 5000 en local
