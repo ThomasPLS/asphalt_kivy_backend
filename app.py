@@ -40,14 +40,9 @@ def login():
 def home():
     return jsonify({"message": "Welcome to my API!"})
 
-# Connexion à la base de données
-conn = psycopg2.connect(
-    dbname="votre_dbname",
-    user="votre_user",
-    password="votre_password",
-    host="votre_host",
-    port="votre_port"
-)
+DATABASE_URL = os.environ.get("postgresql://asphalt_records:i2XTTixzUFAX3CIdtTPccJ9sRdcFEoqH@dpg-cun9i4tsvqrc7390jcug-a/asphaltrecords_db")
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')  # Connexion sécurisée
 
 @app.route('/users', methods=['GET'])
 def get_users():
