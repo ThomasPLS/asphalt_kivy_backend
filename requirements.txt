@@ -1,3 +1,4 @@
+psycopg2-binary
 gunicorn
 aiohappyeyeballs==2.4.6
 aiohttp==3.11.12
