@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import psycopg2
+import subprocess
 
 app = Flask(__name__)
 
@@ -15,9 +16,6 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
-# Créez la base de données
-with app.app_context():
-    db.create_all()
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -51,6 +49,15 @@ def get_users():
     users_list = [{"id": user.id, "username": user.username} for user in users]
     return jsonify(users_list)
 
+@app.route('/migrate', methods=['GET'])
+def run_migration():
+    """Exécute flask db upgrade pour appliquer les migrations."""
+    try:
+        result = subprocess.run(["flask", "db", "upgrade"], capture_output=True, text=True)
+        return f"Migrations exécutées : {result.stdout} {result.stderr}", 200
+    except Exception as e:
+        return f"Erreur lors de la migration : {str(e)}", 500
+    
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Utilise le port de Render ou 5000 en local
     app.run(debug=False, host="0.0.0.0", port=port)
